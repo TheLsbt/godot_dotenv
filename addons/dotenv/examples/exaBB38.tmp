@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dutti2qjqixqe"]
+
+[ext_resource type="Script" path="res://addons/dotenv/examples/example.gd" id="1_2rg13"]
+
+[node name="Example" type="Node"]
+script = ExtResource("1_2rg13")

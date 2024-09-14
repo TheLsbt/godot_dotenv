@@ -13,7 +13,7 @@ const REGEX_PATTERN = '^(.*?) *= *(.*?)$'
 
 
 # TODO: allow to search through a directory
-static func load_dotenv(path: String) -> void:
+static func load(path: String) -> void:
 	if not FileAccess.file_exists(path):
 		printerr('File at ', path, 'does not exsist')
 		return
