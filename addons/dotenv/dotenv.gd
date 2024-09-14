@@ -1,4 +1,5 @@
-extends Node
+extends RefCounted
+class_name Dotenv
 
 ## Loads files directly into the enviroment
 ## This is mostly for local develoment, use something like github secrets for production
@@ -11,13 +12,8 @@ enum ENV_STR_VALIDATION {
 const REGEX_PATTERN = '^(.*?) *= *(.*?)$'
 
 
-func _ready() -> void:
-	load_dotenv("res://erros.env")
-
-
 # TODO: allow to search through a directory
-func load_dotenv(path: String) -> void:
-	var enviroment := {}
+static func load_dotenv(path: String) -> void:
 	if not FileAccess.file_exists(path):
 		printerr('File at ', path, 'does not exsist')
 		return
@@ -47,15 +43,10 @@ func load_dotenv(path: String) -> void:
 		if not value_valid[0]:
 			continue
 
-		enviroment[key_valid[1]] = value_valid[1]
-
-	print(enviroment)
+		OS.set_environment(key_valid[1], value_valid[1])
 
 
-func validate_env_str(string: String, type: String, path: String, ln_idx: int) -> Array:
-	if string.count(' ') == 0:
-		return [true, string]
-
+static func validate_env_str(string: String, type: String, path: String, ln_idx: int) -> Array:
 	if string.length() == 0:
 		printerr('Error parsing %s, the length of the %s at line %s is 0' %[path, type, str(ln_idx)])
 		return [false, '']
@@ -65,14 +56,17 @@ func validate_env_str(string: String, type: String, path: String, ln_idx: int) -
 		printerr('Error parsing %s, the quotes around %s at line %s are not the same' %[path, type, str(ln_idx)])
 		return [false, '']
 
-	if string.count(' ') > 0:
-		printerr('Error parsing %s, there is a space in %s at line %s, expected quotes' %[path, type, str(ln_idx)])
-		return [false, '']
-
 	if string.begins_with("'") and string.ends_with("'"):
 		return [true, string.trim_prefix("'").trim_suffix("'")]
 
 	if string.begins_with('"') and string.ends_with('"'):
 		return [true, string.trim_prefix('"').trim_suffix('"')]
+
+	if string.count(' ') == 0:
+		return [true, string]
+
+	if string.count(' ') > 0:
+		printerr('Error parsing %s, there is a space in %s at line %s, expected quotes' %[path, type, str(ln_idx)])
+		return [false, '']
 
 	return [false, '']
