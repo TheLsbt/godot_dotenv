@@ -1,6 +1,7 @@
 @tool
 extends EditorPlugin
 
+const Dotenv = preload("res://addons/dotenv/dotenv.gd")
 const SyntaxHighlighting = preload("res://addons/dotenv/complements/syntax_highlighting.gd")
 const SETTING_PATH = 'docks/filesystem/textfile_extensions'
 
