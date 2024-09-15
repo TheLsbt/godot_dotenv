@@ -6,6 +6,7 @@ const SYNTAX_REFRESH_TIMER := 1.5
 
 var update_timer := Timer.new()
 var env_highlighter := EnvHighlighter.new()
+var default_highligher = null # EditorPlainTextSyntaxHighlighter
 
 
 func get_class() -> String:
@@ -40,9 +41,6 @@ func unload() -> void:
 	reset_syntax_highlighting()
 
 
-func _get_complement_name() -> String:
-	return 'SyntaxHighlighting'
-
 # Tries to add syntax highlighting to the currently open script editor
 func try_syntax_highlight() -> void:
 	var script_editor := EditorInterface.get_script_editor()
@@ -52,6 +50,9 @@ func try_syntax_highlight() -> void:
 		var filepath: String = editor.get('metadata/_edit_res_path')
 		if filepath.ends_with('.env'):
 			if editor.get_base_editor().get('syntax_highlighter') != env_highlighter:
+				var current_highlighter = editor.get_base_editor().get('syntax_highlighter')
+				if current_highlighter != null and default_highligher == null:
+					default_highligher = editor.get_base_editor().get('syntax_highlighter')
 				editor.get_base_editor().set('syntax_highlighter', env_highlighter)
 
 
@@ -61,9 +62,7 @@ func reset_syntax_highlighting() -> void:
 		if editor.get_class() == 'TextEditor':
 			var filepath: String = editor.get('metadata/_edit_res_path')
 			if filepath.ends_with('.env'):
-				# Although these editors are supposed to have a text syntax highlighting, it looks
-				# the same as null
-				editor.get_base_editor().syntax_highlighter = null
+				editor.get_base_editor().syntax_highlighter = default_highligher
 
 
 class EnvHighlighter extends EditorSyntaxHighlighter:
