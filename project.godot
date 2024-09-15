@@ -14,10 +14,6 @@ config/name="godot_dotenv"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 config/icon="res://icon.svg"
 
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/dotenv/plugin.cfg")
-
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
