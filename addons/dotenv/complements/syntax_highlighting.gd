@@ -8,6 +8,10 @@ var update_timer := Timer.new()
 var env_highlighter := EnvHighlighter.new()
 
 
+func get_class() -> String:
+	return 'dotenv_complement'
+
+
 func onload() -> void:
 	update_timer.wait_time = SYNTAX_REFRESH_TIMER
 	update_timer.name = 'EnvSyntaxRefreshTimer'
