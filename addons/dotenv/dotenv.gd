@@ -35,7 +35,7 @@ static func load_(path: String, recursive := false, continue_in_release := false
 # This loads a file directly, its better to use load_() because it has checks
 static func load_env_file(path: String, continue_in_release: bool) -> void:
 	# It isnt recommended to use env files in a production build, use github secrets
-	if OS.has_feature('realesed') and not continue_in_release:
+	if OS.has_feature('release') and not continue_in_release:
 		return
 
 	if not FileAccess.file_exists(path):
