@@ -12,8 +12,12 @@ var syntax_highlighting: SyntaxHighlighting
 func _enter_tree() -> void:
 	# To recognise .env file we need to modify a option in the editor settings
 	var settings = EditorInterface.get_editor_settings()
-	if not (settings.get_setting(SETTING_PATH) as String).contains('env'):
-		settings.set_setting(SETTING_PATH, original_setting + ',env')
+	original_setting = settings.get_setting(SETTING_PATH).strip_edges()
+	if not original_setting.contains("env"):
+		var adding = "env"
+		if original_setting:
+			adding = ","+adding
+		settings.set_setting(SETTING_PATH, original_setting + adding)
 
 	syntax_highlighting = SyntaxHighlighting.new()
 	syntax_highlighting.onload()
